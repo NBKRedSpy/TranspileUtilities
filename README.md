@@ -18,7 +18,10 @@ codeMatcher
             .Insert(
                 //Inserts a load operation
                 cardListVariable.Load,
+                
+                //Some function call
                 CodeInstruction.Call(typeof(Foo), nameof(Bar), new Type[] { typeof(List<Fizz>) }),  
+                
                 //Inserts the store operation
                 cardListVariable.Store
             )
