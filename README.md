@@ -11,7 +11,7 @@ StackVariableInstruction fooVariable = null;   //The local variable
 codeMatcher
             .MatchForward(true,
                 ...
-                //The first parameter determines if a load or store is expected.
+                //The first parameter determines if a load or store must be matched.
                 new CodeMatch(instruction => StackVariableInstruction.Create(true, instruction, out cardListVariable))
                 ...
                 )
