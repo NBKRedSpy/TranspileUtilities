@@ -12,18 +12,18 @@ codeMatcher
             .MatchForward(true,
                 ...
                 //The first parameter determines if a load or store must be matched.
-                new CodeMatch(instruction => StackVariableInstruction.Create(true, instruction, out cardListVariable))
+                new CodeMatch(instruction => StackVariableInstruction.Create(true, instruction, out fooVariable))
                 ...
                 )
             .Insert(
                 //Inserts a load operation
-                cardListVariable.Load,
+                fooVariable.Load,
                 
                 //Some function call
                 CodeInstruction.Call(typeof(Foo), nameof(Bar), new Type[] { typeof(List<Fizz>) }),  
                 
                 //Inserts a store operation
-                cardListVariable.Store
+                fooVariable.Store
             )
             .InstructionEnumeration()
 ```
