@@ -22,7 +22,7 @@ codeMatcher
                 //Some function call
                 CodeInstruction.Call(typeof(Foo), nameof(Bar), new Type[] { typeof(List<Fizz>) }),  
                 
-                //Inserts the store operation
+                //Inserts a store operation
                 cardListVariable.Store
             )
             .InstructionEnumeration()
