@@ -37,7 +37,7 @@ instruction.Store;  //Return the store version
 ```
 
 # Using the Code
-Copy the StackVariableInstruction.cs file from [releases](./releases) into the target project.
+Copy the StackVariableInstruction.cs file from [releases](https://github.com/NBKRedSpy/TranspileUtilities/releases) into the target project.
 
 # StackVariableInstruction.Create
 
