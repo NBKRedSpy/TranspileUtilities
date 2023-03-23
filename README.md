@@ -51,4 +51,8 @@ A utility function to create a stack variable while using a code matcher.
 
 
 # Project Folders
-The solution in the src folder is responsible for creating and testing the StackVariableInstruction.cs in the root of the repository.  It is not required to use the utility class.
+|Project|Description|
+|--|--|
+|src/TranspileUtilities|Creates the /StackVariableInstruction.cs file|
+|src/TranspileUtilitiesTest|The tests for the TranspileUtilities project|
+|src/ILTest|Creates a DLL with the various load/store operations for testing purposes.  Not used in this project|
