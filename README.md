@@ -22,7 +22,7 @@ return codeMatcher
         fooVariable.Load,
         
         //Some function call
-        CodeInstruction.Call(typeof(Foo), nameof(Bar)),
+        CodeInstruction.Call(typeof(Foo), nameof(Foo.Bar)),
         
         //Inserts a store operation
         fooVariable.Store
