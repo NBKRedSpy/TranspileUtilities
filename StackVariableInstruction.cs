@@ -73,6 +73,7 @@ namespace TranspileUtilities
             return false;
         }
 
+
         /// <summary>
         /// Gets the store version of the instruction
         /// </summary>
@@ -96,7 +97,7 @@ namespace TranspileUtilities
                     VerifyLocalBuilder(storeInstruction.operand);
                     return new CodeInstruction(OpCodes.Ldloc_S, storeInstruction.operand);
                 case OpCode x when x == OpCodes.Stloc_0:
-                    return new CodeInstruction(OpCodes.Ldloc_3);
+                    return new CodeInstruction(OpCodes.Ldloc_0);
                 case OpCode x when x == OpCodes.Stloc_1:
                     return new CodeInstruction(OpCodes.Ldloc_1);
                 case OpCode x when x == OpCodes.Stloc_2:
@@ -132,7 +133,7 @@ namespace TranspileUtilities
                     VerifyLocalBuilder(loadInstruction.operand);
                     return new CodeInstruction(OpCodes.Stloc_S, loadInstruction.operand);
                 case OpCode x when x == OpCodes.Ldloc_0:
-                    return new CodeInstruction(OpCodes.Stloc_3);
+                    return new CodeInstruction(OpCodes.Stloc_0);
                 case OpCode x when x == OpCodes.Ldloc_1:
                     return new CodeInstruction(OpCodes.Stloc_1);
                 case OpCode x when x == OpCodes.Ldloc_2:
