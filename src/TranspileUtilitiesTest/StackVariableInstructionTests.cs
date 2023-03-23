@@ -18,7 +18,7 @@ namespace TranspileUtilities.Tests
         [Fact()]
         public void ctor__Numbered_OpCodes__LoadTranslation__Success()
         {
-            List<(OpCode source, OpCode target)> numberedOps = new List<(OpCode source, OpCode target)>() {
+            var numberedOps = new List<(OpCode source, OpCode target)>() {
                 (OpCodes.Ldloc_0,  OpCodes.Stloc_0),
                 (OpCodes.Ldloc_1,  OpCodes.Stloc_1),
                 (OpCodes.Ldloc_2,  OpCodes.Stloc_2),
@@ -50,7 +50,7 @@ namespace TranspileUtilities.Tests
         [Fact()]
         public void ctor__Numbered_OpCodes__StoreTranslation__Success()
         {
-            List<(OpCode source, OpCode target)> numberedOps = new List<(OpCode source, OpCode target)>() {
+            var numberedOps = new List<(OpCode source, OpCode target)>() {
                 (OpCodes.Stloc_0, OpCodes.Ldloc_0),
                 (OpCodes.Stloc_1, OpCodes.Ldloc_1),
                 (OpCodes.Stloc_2, OpCodes.Ldloc_2),
@@ -85,7 +85,7 @@ namespace TranspileUtilities.Tests
         public void ctor__LocalBuilder_Store_Translation__Success()
         {
 
-            List<(OpCode source, OpCode target)> numberedOps = new List<(OpCode source, OpCode target)>() {
+            var numberedOps = new List<(OpCode source, OpCode target)>() {
                 (OpCodes.Stloc, OpCodes.Ldloc),
                 (OpCodes.Stloc_S, OpCodes.Ldloc_S),
             };
@@ -142,7 +142,7 @@ namespace TranspileUtilities.Tests
         public void ctor__LocalBuilder_Load_Translation__Success()
         {
 
-            List<(OpCode source, OpCode target)> numberedOps = new List<(OpCode source, OpCode target)>() {
+            var numberedOps = new List<(OpCode source, OpCode target)>() {
                 (OpCodes.Ldloc, OpCodes.Stloc),
                 (OpCodes.Ldloc_S, OpCodes.Stloc_S),
             };
@@ -172,6 +172,24 @@ namespace TranspileUtilities.Tests
         }
 
         [Fact()]
+        public void Ctor__LoadAddressNotSupported__Exception()
+        {
+
+            try
+            {
+                var instruction = new StackVariableInstruction(new CodeInstruction(OpCodes.Ldloca));
+                Assert.Fail("Exception not thrown");
+            }
+            catch (Exception ex)
+            {
+                Assert.IsType<ApplicationException>(ex);
+                Assert.Equal("Unexpected opcode: ldloca", ex.Message);
+            }
+
+        }
+
+
+        [Fact()]
         public void Ctor__NullInstruction__Exception()
         {
             Assert.Throws<ArgumentNullException>("instruction", () =>
@@ -180,13 +198,15 @@ namespace TranspileUtilities.Tests
             });
         }
 
+        
+        
         #endregion
 
         [Fact()]
         public void Create__Tests__Success()
         {
 
-            var facts = new List<(bool isStore, OpCode op, bool isMatch)>()
+            var facts = new List<(bool isStore, OpCode op, bool expectedIsMatch)>()
             {
                 //Stores
                 (true, OpCodes.Stloc_3, true),
@@ -199,6 +219,10 @@ namespace TranspileUtilities.Tests
                 //No match
                 (false, OpCodes.Add, false),
                 (true, OpCodes.Add, false),
+
+                //Ldloca not compatbile
+                (false, OpCodes.Ldloca, false),
+                (false, OpCodes.Ldloca_S, false),
             };
 
 
@@ -206,11 +230,11 @@ namespace TranspileUtilities.Tests
             {
                 StackVariableInstruction variable;
 
-                bool result = StackVariableInstruction.Create(isStore: fact.isStore, new CodeInstruction(fact.op), out variable);
+                bool result = StackVariableInstruction.Create(expectStore: fact.isStore, new CodeInstruction(fact.op), out variable);
 
-                Assert.Equal(fact.isMatch, result);
+                Assert.Equal(fact.expectedIsMatch, result);
                 
-                if (fact.isMatch) Assert.NotNull(variable);
+                if (fact.expectedIsMatch) Assert.NotNull(variable);
                 else Assert.Null(variable);
             }
         }

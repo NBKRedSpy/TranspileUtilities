@@ -1,5 +1,5 @@
 # Description 
-A Harmony transpiler helper class that can take a local variable load or store operation and return the complement.
+A Harmony transpiler helper class that can take a local variable load or store operation and create the complement.
 
 Useful when different versions of the target code may change operations.  For example, stloc_3 to stloc_s.
 
@@ -12,8 +12,8 @@ StackVariableInstruction fooVariable = null;   //The local variable
 return codeMatcher
     .MatchForward(true,
         ...
-        //The first parameter determines if a load or store must be matched.
-        new CodeMatch(instruction => StackVariableInstruction.Create(isStore: true, instruction, out fooVariable))
+        //The first parameter determines if a load or store operation is required for a successful CodeMatch.
+        new CodeMatch(instruction => StackVariableInstruction.Create(expectStore: true, instruction, out fooVariable))
         ...
         )
     .ThrowIfNotMatch("Did not find load section")        
@@ -27,18 +27,17 @@ return codeMatcher
         //Inserts a store operation
         fooVariable.Store
     )
-    .InstructionEnumeration()
+    .InstructionEnumeration();
 ```
-## Using directly:
+## Using Directly:
 ```csharp
-            StackVariableInstruction instruction = new StackVariableInstruction(new CodeInstruction(OpCodes.Stloc_2));
-            instruction.Load;   //Return the load version
-            instruction.Store;  //Return the store version
+var instruction = new StackVariableInstruction(new CodeInstruction(OpCodes.Stloc_2));
+instruction.Load;   //Return the load version
+instruction.Store;  //Return the store version
 ```
-
 
 # Using the Code
-Copy the StackVariableInstruction.cs file in the root of this repository into your application.
+Copy the StackVariableInstruction.cs file from [releases](./releases) into the target project.
 
 # StackVariableInstruction.Create
 

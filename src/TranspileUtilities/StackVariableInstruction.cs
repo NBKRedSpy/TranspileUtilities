@@ -21,9 +21,10 @@ namespace TranspileUtilities
         public CodeInstruction Store { get; private set; }
 
         /// <summary>
-        /// The code instruction to create the load/store CodeInstructions from.
+        /// Creates the Load and Store code complementary instructions based on the 
+        /// instruction provided.
         /// </summary>
-        /// <param name="instruction"></param>
+        /// <param name="instruction">The load or store construction to build the Load and Store properties</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
         public StackVariableInstruction(CodeInstruction instruction)
@@ -47,35 +48,43 @@ namespace TranspileUtilities
         }
 
         /// <summary>
-        /// A utility function to create a stack variable while using a code matcher.
+        /// Creates a StackVariableInstruction based on the code instruction.  
+        /// Used to create a CodeMatch predicate.  Creates a new StackVariableInstruction if the match succeeds. 
         /// </summary>
-        /// <param name="isStore">If true, will expect the codeInstruction to be a store opcode.  Otherwise a load opcode</param>
+        /// <param name="expectStore">If true, will expect the codeInstruction to be a store opcode. Otherwise, a load opcode</param>
         /// <param name="codeInstruction">The instruction source</param>
-        /// <param name="stackVariable">The newly created stack variable.  Will be null if no match</param>
+        /// <param name="stackVariable">The newly created StackVariableInstruction instance.  Will be null if no match.</param>
         /// <returns>True if the opcode matched the isStore expectations</returns>
         /// <example>
         /// StackVariableInstruction cardListVariable = null;
         /// ...
-        /// new CodeMatch(instruction => StackVariableInstruction.Create(true, instruction, out cardListVariable))
+        /// new CodeMatch(instruction => StackVariableInstruction.Create(expectStore: true, instruction, out cardListVariable))
         /// ...
         /// </example>
-        public static bool Create(bool isStore, CodeInstruction codeInstruction, out StackVariableInstruction stackVariable)
+        public static bool Create(bool expectStore, CodeInstruction codeInstruction, out StackVariableInstruction stackVariable)
         {
             stackVariable = null;
 
-            if((isStore && codeInstruction.IsStloc()) || (isStore == false && codeInstruction.IsLdloc()))
+            //Excludes ldloca.  They are included in the IsLdloc() test, but do not have a store complement and therefore unsupported.
+            if(codeInstruction.opcode == OpCodes.Ldloca || codeInstruction.opcode == OpCodes.Ldloca_S)
+            {
+                return false;
+            }
+            else if((expectStore && codeInstruction.IsStloc()) || (expectStore == false && codeInstruction.IsLdloc()))
             {
                 stackVariable = new StackVariableInstruction(codeInstruction);
                 return true;
 
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
 
         /// <summary>
-        /// Gets the store version of the instruction
+        /// Gets the load version of the instruction
         /// </summary>
         /// <param name="storeInstruction"></param>
         /// <returns></returns>
@@ -111,7 +120,7 @@ namespace TranspileUtilities
 
 
         /// <summary>
-        /// Gets the load version of the instruction
+        /// Gets the store version of the instruction
         /// </summary>
         /// <param name="loadInstruction"></param>
         /// <returns></returns>
@@ -148,7 +157,7 @@ namespace TranspileUtilities
         /// <summary>
         /// throws an exception if the operand is not a LocalBuilder or is null.
         /// </summary>
-        /// <param name="storeInstruction"></param>
+        /// <param name="operand">The operand of the CodeInstruction.</param>
         /// <exception cref="ApplicationException"></exception>
         private void VerifyLocalBuilder(object operand)
         {
