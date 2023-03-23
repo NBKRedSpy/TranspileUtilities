@@ -9,7 +9,7 @@ Useful when different versions of the target code may change operations.  For ex
 ```csharp
 StackVariableInstruction fooVariable = null;   //The local variable
 
-codeMatcher
+return codeMatcher
     .MatchForward(true,
         ...
         //The first parameter determines if a load or store must be matched.
@@ -22,7 +22,7 @@ codeMatcher
         fooVariable.Load,
         
         //Some function call
-        CodeInstruction.Call(typeof(Foo), nameof(Bar), new Type[] { typeof(List<Fizz>) }),  
+        CodeInstruction.Call(typeof(Foo), nameof(Bar)),
         
         //Inserts a store operation
         fooVariable.Store
