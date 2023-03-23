@@ -3,7 +3,8 @@ A Harmony transpiler helper class that can take a local variable load or store o
 
 Useful when different versions of the target code may change operations.  For example, stloc_3 to stloc_s.
 
-# Code Matcher Example:
+# Examples
+## Code Matcher Example:
 
 ```csharp
 StackVariableInstruction fooVariable = null;   //The local variable
@@ -27,7 +28,7 @@ codeMatcher
     )
     .InstructionEnumeration()
 ```
-# Using directly:
+## Using directly:
 ```csharp
             StackVariableInstruction instruction = new StackVariableInstruction(new CodeInstruction(OpCodes.Stloc_2));
             instruction.Load;   //Return the load version
@@ -35,7 +36,7 @@ codeMatcher
 ```
 
 
-# Using Code
+# Using the Code
 Copy the StackVariableInstruction.cs file in the root of this repository into your application.
 
 # StackVariableInstruction.Create
