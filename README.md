@@ -16,6 +16,7 @@ codeMatcher
         new CodeMatch(instruction => StackVariableInstruction.Create(isStore: true, instruction, out fooVariable))
         ...
         )
+    .ThrowIfNotMatch("Did not find load section")        
     .Insert(
         //Inserts a load operation
         fooVariable.Load,
